@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orb AI | Premium Gemini Assistant</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <!-- Prism.js for Syntax Highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <!-- Support for popular languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <!-- Ambient Moving Objects in Background -->
+    <div class="ambient-background">
+        <div class="ambient-orb orb-indigo"></div>
+        <div class="ambient-orb orb-violet"></div>
+        <div class="ambient-orb orb-cyan"></div>
+        
+        <!-- Floating Particle Dots -->
+        <div class="ambient-dot dot-1"></div>
+        <div class="ambient-dot dot-2"></div>
+        <div class="ambient-dot dot-3"></div>
+        <div class="ambient-dot dot-4"></div>
+        <div class="ambient-dot dot-5"></div>
+        <div class="ambient-dot dot-6"></div>
+        <div class="ambient-dot dot-7"></div>
+        <div class="ambient-dot dot-8"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-container">
+                    <div class="logo-glow"></div>
+                    <i data-lucide="sparkles" class="logo-icon"></i>
+                    <span class="logo-text">Orb AI</span>
+                </div>
+                <button class="close-sidebar-btn" id="closeSidebarBtn" aria-label="Close sidebar">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            
+            <button class="new-chat-btn" id="newChatBtn">
+                <i data-lucide="plus"></i>
+                <span>New Conversation</span>
+            </button>
+
+            <!-- Chat History List -->
+            <div class="chat-history-container">
+                <div class="history-label">Recent Conversations</div>
+                <div class="chat-history-list" id="chatHistoryList">
+                    <!-- Dynamic history items loaded here -->
+                    <div class="no-history-msg">No chats yet</div>
+                </div>
+            </div>
+
+            <!-- Sidebar Footer -->
+            <div class="sidebar-footer">
+                <button class="footer-action-btn" id="openSettingsBtn">
+                    <i data-lucide="settings"></i>
+                    <span>Settings</span>
+                </button>
+                <div class="status-badge-container">
+                    <span class="status-dot disconnected" id="apiStatusDot"></span>
+                    <span class="status-text" id="apiStatusText">Checking Status...</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Chat Panel -->
+        <main class="chat-panel">
+            <!-- Header -->
+            <header class="chat-header">
+                <div class="header-left">
+                    <button class="menu-btn" id="menuBtn" aria-label="Open sidebar">
+                        <i data-lucide="menu"></i>
+                    </button>
+                    <button class="back-btn" id="backBtn" aria-label="Back to main screen" title="Back to main screen" style="display: none;">
+                        <i data-lucide="arrow-left"></i>
+                    </button>
+                    <div class="chat-meta">
+                        <h2 class="chat-title" id="activeChatTitle">New Chat</h2>
+                        <span class="model-badge" id="activeModelBadge">gemini-2.5-flash</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="header-action-btn" id="clearChatBtn" title="Clear current messages">
+                        <i data-lucide="trash-2"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Message Area -->
+            <div class="message-area" id="messageArea">
+                <!-- Welcome/Empty State screen -->
+                <div class="welcome-container" id="welcomeContainer">
+                    <div class="welcome-header">
+                        <div class="welcome-icon-wrapper">
+                            <i data-lucide="bot" class="welcome-icon"></i>
+                        </div>
+                        <h1>What can I help you build today?</h1>
+                        <p class="welcome-subtitle">Ask questions, generate code, explain concepts, or brainstorm ideas with Gemini.</p>
+                    </div>
+
+                    <div class="prompts-grid">
+                        <div class="prompt-card" data-prompt="Explain quantum computing in simple terms for a 10-year old.">
+                            <div class="prompt-card-icon"><i data-lucide="lightbulb"></i></div>
+                            <h3>Explain Concepts</h3>
+                            <p>"Explain quantum computing in simple terms..."</p>
+                        </div>
+                        <div class="prompt-card" data-prompt="Write a Python script that scrapes a website using BeautifulSoup and fetches title tags.">
+                            <div class="prompt-card-icon"><i data-lucide="code-2"></i></div>
+                            <h3>Write Code</h3>
+                            <p>"Write a Python script that scrapes a website..."</p>
+                        </div>
+                        <div class="prompt-card" data-prompt="Draft a polite email to a client requesting feedback on a recently delivered project.">
+                            <div class="prompt-card-icon"><i data-lucide="mail"></i></div>
+                            <h3>Draft Emails</h3>
+                            <p>"Draft a polite email to a client requesting feedback..."</p>
+                        </div>
+                        <div class="prompt-card" data-prompt="Analyze how glassmorphism design compares with flat design. What are the key pros and cons?">
+                            <div class="prompt-card-icon"><i data-lucide="sparkles"></i></div>
+                            <h3>Brainstorm Ideas</h3>
+                            <p>"Analyze how glassmorphism design compares..."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Messages list -->
+                <div class="messages-list" id="messagesList" style="display: none;">
+                    <!-- Messages will be populated here by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Input area -->
+            <footer class="chat-input-container">
+                <div class="input-glow"></div>
+                <div class="input-bar-wrapper">
+                    <textarea class="chat-input" id="chatInput" rows="1" placeholder="Type a message or paste code..." autofocus></textarea>
+                    
+                    <div class="input-controls">
+                        <button class="send-btn" id="sendBtn" title="Send message" disabled>
+                            <i data-lucide="arrow-up" class="send-icon"></i>
+                        </button>
+                        <button class="stop-btn" id="stopBtn" title="Stop response" style="display: none;">
+                            <i data-lucide="square" class="stop-icon"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="input-footer">
+                    Orb AI uses Gemini LLMs. Double-check important facts.
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal-content glass">
+            <div class="modal-header">
+                <h3><i data-lucide="sliders" class="modal-header-icon"></i> Chat Settings</h3>
+                <button class="modal-close-btn" id="closeSettingsBtnX">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="setting-group">
+                    <label class="setting-label" for="apiKeyInput">Gemini API Key</label>
+                    <p class="setting-description">Use a custom Gemini API Key. Kept secure in browser session storage; never stored on the server.</p>
+                    <div class="api-key-input-wrapper">
+                        <input type="password" id="apiKeyInput" placeholder="AIzaSy..." class="setting-input">
+                        <button class="toggle-password-btn" id="toggleApiKeyVisibility" type="button">
+                            <i data-lucide="eye" id="eyeIcon"></i>
+                        </button>
+                    </div>
+                    <span class="api-key-helper" id="apiKeyHelper">If empty, server will try using local environment configurations.</span>
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label" for="modelSelect">AI Model</label>
+                    <p class="setting-description">Select the Gemini model variant to query.</p>
+                    <select id="modelSelect" class="setting-input select-input">
+                        <option value="gemini-2.5-flash" selected>Gemini 2.5 Flash (Default - Fast & efficient)</option>
+                        <option value="gemini-2.5-pro">Gemini 2.5 Pro (Analytical - Complex coding/reasoning)</option>
+                        <option value="gemini-2.0-flash-lite">Gemini 2.0 Flash Lite (Cost-efficient / Low-latency)</option>
+                    </select>
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label">
+                        <span>Temperature</span>
+                        <span class="range-val" id="tempValue">0.7</span>
+                    </label>
+                    <p class="setting-description">Higher values lead to more creative responses, lower values make it more deterministic.</p>
+                    <input type="range" id="tempInput" min="0" max="2" step="0.1" value="0.7" class="setting-range">
+                </div>
+
+                <div class="setting-group">
+                    <label class="setting-label" for="systemPromptInput">System Instruction</label>
+                    <p class="setting-description">Set a persistent instruction for the AI (e.g. "Answer as a Senior Software Engineer").</p>
+                    <textarea id="systemPromptInput" placeholder="You are a helpful, precise AI assistant..." class="setting-input text-area-input" rows="3"></textarea>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="modal-action-btn btn-cancel" id="cancelSettingsBtn">Reset Default</button>
+                <button class="modal-action-btn btn-save" id="saveSettingsBtn">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Javascript -->
+    <script src="/js/app.js"></script>
+</body>
+</html>
